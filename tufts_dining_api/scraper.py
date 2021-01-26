@@ -4,41 +4,67 @@ import datetime, json
 import requests
 from bs4 import BeautifulSoup
 
-from tufts_dining_api.locations import locations
+from locations import locations
+
+class Dining():
+    def __init__(self):
+        self.location = None
+        self.locationId = None
+        self.date = None
 
 
-def main():  
-    # TODO: add a lookup by date functionality
-    location = 'Kindlevan Cafe'
-    url = f"http://menus.tufts.edu/FoodPro%203.1.NET/shortmenu.aspx?sName=TUFTS+DINING&locationNum={locations[location]}&locationName={location}&naFlag=1"
-    website = requests.get(url)
-    soup = BeautifulSoup(website.text, 'html.parser')
+    # TODO: support querying on the basis of date provided
+    """
+    Returns the menu of the provided dining location
+    """
+    def getMenu(self, location, date=None):
+        if location not in locations:
+            print("Invalid dining location provided. Please provide a valid location.")
+        else:
+            if date:
+                self.date = date # TODO: error checking here
+            else: 
+                self.date = datetime.date.today() 
+            self.location = location
+            self.locationId = locations[self.location]
 
-    div_list = soup.findAll("div")
-    menu_date = None
+            # TODO: modify url to accommodate the date parameter
+            url = f"http://menus.tufts.edu/FoodPro%203.1.NET/shortmenu.aspx?sName=TUFTS+DINING&locationNum={self.locationId}&locationName={self.location}&naFlag=1"
+            website = requests.get(url)
+            soup = BeautifulSoup(website.text, 'html.parser')
 
-    for div in div_list:
-        try:
-            curr_div_class = div["class"][0]
-            if not menu_date:
-                if curr_div_class == "shortmenutitle":
-                    menu_date = "".join(div.text.split(",")[-2:]).strip()
+            div_list = soup.findAll("div")
+            menu_date = None
+            menu_type = None
+            category = None
+            food_item = None
+            
+            response = {}
 
-            menu_type = div.text if curr_div_class == "shortmenumeals" else None
-            category = div.text if curr_div_class == "shortmenucats" else None
-            food_item = div.text if curr_div_class == "shortmenurecipes" else None
-            if menu_type:
-                print(f"xxxxxxxxxxxxxxxxx{menu_type}xxxxxxxxxxxxxxxxx")
-            if category:
-                print(f"---------{category}---------")
-            if food_item:
-                print(food_item)
-        except:
-            continue
+            for div in div_list:
+                try:
+                    curr_div_class = div["class"][0]
+                    if not menu_date:
+                        if curr_div_class == "shortmenutitle":
+                            menu_date = "".join(div.text.split(",")[-2:]).strip()
+                            response["date"] = menu_date
+                    if curr_div_class == "shortmenumeals":
+                        menu_type = div.text
+                        if menu_type not in response:
+                            response[menu_type] = []
+                    elif curr_div_class == "shortmenucats":
+                        category = div.text
+                        category_dict = {category : []}
+                        response[menu_type].append(category_dict)
+                    elif curr_div_class == "shortmenurecipes":
+                        food_item = div.text
+                        category_dict[category].append(food_item)
+                    # TODO: account for duplicate categories and food_items
+                except:
+                    continue
+    
+        return response
 
-    print(menu_date)
-
-
-
-if __name__ == "__main__":
-    main()
+# tufts_dining = Dining()
+# res = tufts_dining.getMenu("Kindlevan Cafe")
+# print(res)
