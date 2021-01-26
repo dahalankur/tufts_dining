@@ -7,11 +7,11 @@ def main():
     locations = {"Carmichael Dining Center" : "09", 
                  "Dewick Dining Center" : "11",
                  "The Commons Marketplace" : "55",
-                 "Hodgdon Food On-the-Run  " : "14",
+                 "Hodgdon Food On-the-Run" : "14",
                  "Pax et Lox Glatt Kosher Deli" : "27",
-                 "Kindlevan Caf%26eacute%3b " : "03"}
+                 "Kindlevan Cafe" : "03"}
 
-    location = 'Carmichael Dining Center'
+    location = 'Kindlevan Cafe'
     url = f"http://menus.tufts.edu/FoodPro%203.1.NET/shortmenu.aspx?sName=TUFTS+DINING&locationNum={locations[location]}&locationName={location}&naFlag=1"
     website = requests.get(url)
     soup = BeautifulSoup(website.text, 'html.parser')
