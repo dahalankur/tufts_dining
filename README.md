@@ -1,1 +1,1 @@
-# Tufts Dining Menu
+# Tufts Dining API
