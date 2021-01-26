@@ -2,8 +2,9 @@ import datetime
 import requests
 from bs4 import BeautifulSoup
 
-from locations import locations
+from tufts_dining_api.locations import locations
 
+# TODO: rename this class (and this file)
 class Dining():
     def __init__(self):
         self.location = None
@@ -16,25 +17,23 @@ class Dining():
     Returns the menu of the provided dining location
     """
     def getMenu(self, location, date=None):
-        if location not in locations:
-            print("Invalid dining location provided. Please provide a valid location.")
-        else:
+        if location in locations:
+            self.location = location
+            self.locationId = locations[self.location]
+
             if date:
                 self.date = date # TODO: error checking here
             else: 
                 self.date = datetime.date.today() 
-            self.location = location
-            self.locationId = locations[self.location]
-
+        
             # TODO: modify url to accommodate the date parameter
             url = f"http://menus.tufts.edu/FoodPro%203.1.NET/shortmenu.aspx?sName=TUFTS+DINING&locationNum={self.locationId}&locationName={self.location}&naFlag=1"
-            website = requests.get(url)
-            soup = BeautifulSoup(website.text, 'html.parser')
-
+        
+            soup = BeautifulSoup(requests.get(url).text, 'html.parser')
             div_list = soup.findAll("div")
-            menu_date = None
-            
-            response = {}
+    
+            response = dict()
+            menu_date = None  # TODO: modify this to use the supplied date instead
 
             for div in div_list:
                 try:
@@ -57,9 +56,6 @@ class Dining():
                     # TODO: account for duplicate categories and food_items
                 except:
                     continue
-    
-        return response
-
-tufts_dining = Dining()
-res = tufts_dining.getMenu("Kindlevan Cafe")
-print(res)
+            return response
+        else:
+            return {"error" : "Invalid location"}

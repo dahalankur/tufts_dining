@@ -1,0 +1,1 @@
+from tufts_dining_api.scraper import Dining

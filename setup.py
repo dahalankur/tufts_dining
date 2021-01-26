@@ -15,7 +15,7 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python"
     ],
-    keywords="tufts-dining tufts dining-api",
+    keywords="tufts-dining-api tufts-university dining-api",
     install_requires=[
         "beautifulsoup4==4.9.3",
         "certifi==2020.12.5",
