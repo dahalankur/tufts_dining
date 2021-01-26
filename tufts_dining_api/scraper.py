@@ -44,15 +44,15 @@ class Dining():
                             menu_date = "".join(div.text.split(",")[-2:]).strip()
                             response["date"] = menu_date
                     if curr_div_class == "shortmenumeals":
-                        menu_type = div.text
+                        menu_type = div.text.strip()
                         if menu_type not in response:
                             response[menu_type] = []
                     elif curr_div_class == "shortmenucats":
-                        category = div.text
+                        category = div.text.strip()
                         category_dict = {category : []}
                         response[menu_type].append(category_dict)
                     elif curr_div_class == "shortmenurecipes":
-                        food_item = div.text
+                        food_item = div.text.strip()
                         category_dict[category].append(food_item)
                     # TODO: account for duplicate categories and food_items
                 except:
@@ -60,6 +60,6 @@ class Dining():
     
         return response
 
-# tufts_dining = Dining()
-# res = tufts_dining.getMenu("Kindlevan Cafe")
-# print(res)
+tufts_dining = Dining()
+res = tufts_dining.getMenu("Kindlevan Cafe")
+print(res)
