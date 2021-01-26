@@ -1,6 +1,4 @@
-import os
-import sys
-import datetime, json
+import datetime
 import requests
 from bs4 import BeautifulSoup
 
@@ -35,9 +33,6 @@ class Dining():
 
             div_list = soup.findAll("div")
             menu_date = None
-            menu_type = None
-            category = None
-            food_item = None
             
             response = {}
 
