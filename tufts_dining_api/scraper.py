@@ -1,18 +1,14 @@
-import sys, json, datetime
-
-from bs4 import BeautifulSoup
+import os
+import sys
+import datetime, json
 import requests
+from bs4 import BeautifulSoup
+
+from tufts_dining_api.locations import locations
+
 
 def main():  
-    # dictionary of locations mapped to their location identifiers
-    locations = {"Carmichael Dining Center" : "09", 
-                 "Dewick Dining Center" : "11",
-                 "The Commons Marketplace" : "55",
-                 "Hodgdon Food On-the-Run" : "14",
-                 "Pax et Lox Glatt Kosher Deli" : "27",
-                 "Kindlevan Cafe" : "03"}
-
-    # TODO: add a lookup by date functionality (take in as the second parameter) 
+    # TODO: add a lookup by date functionality
     location = 'Kindlevan Cafe'
     url = f"http://menus.tufts.edu/FoodPro%203.1.NET/shortmenu.aspx?sName=TUFTS+DINING&locationNum={locations[location]}&locationName={location}&naFlag=1"
     website = requests.get(url)
