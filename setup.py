@@ -5,7 +5,7 @@ setup(
     version="1.0",
     packages=find_packages(),
     description="A Python API for retrieving Tufts Dining menus",
-    url="https://github.com/dahalankur/tufts_dining_api",
+    url="https://github.com/dahalankur/tufts-dining-api",
     author="Ankur Dahal",
     author_email="dahalankur123@gmail.com",
     license="MIT",
