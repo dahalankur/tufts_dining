@@ -1,6 +1,7 @@
+import sys, json, datetime
+
 from bs4 import BeautifulSoup
 import requests
-import json
 
 def main():  
     # dictionary of locations mapped to their location identifiers
@@ -11,6 +12,7 @@ def main():
                  "Pax et Lox Glatt Kosher Deli" : "27",
                  "Kindlevan Cafe" : "03"}
 
+    # TODO: add a lookup by date functionality (take in as the second parameter) 
     location = 'Kindlevan Cafe'
     url = f"http://menus.tufts.edu/FoodPro%203.1.NET/shortmenu.aspx?sName=TUFTS+DINING&locationNum={locations[location]}&locationName={location}&naFlag=1"
     website = requests.get(url)
@@ -21,24 +23,24 @@ def main():
 
     for div in div_list:
         try:
+            curr_div_class = div["class"][0]
             if not menu_date:
-                if div["class"][0] == "shortmenutitle":
+                if curr_div_class == "shortmenutitle":
                     menu_date = "".join(div.text.split(",")[-2:]).strip()
-                    #date = str([date.strip() for date in menu_date])[1:]
 
-            menu_type = div.text if div["class"][0] == "shortmenumeals" else None
-            category = div.text if div["class"][0] == "shortmenucats" else None
-
+            menu_type = div.text if curr_div_class == "shortmenumeals" else None
+            category = div.text if curr_div_class == "shortmenucats" else None
+            food_item = div.text if curr_div_class == "shortmenurecipes" else None
             if menu_type:
                 print(f"xxxxxxxxxxxxxxxxx{menu_type}xxxxxxxxxxxxxxxxx")
             if category:
                 print(f"---------{category}---------")
-            if div["class"][0] == "shortmenurecipes":
-                print(div.text)
+            if food_item:
+                print(food_item)
         except:
             continue
 
-    # print(menu_date)
+    print(menu_date)
 
 
 
