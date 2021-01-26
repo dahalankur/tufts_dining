@@ -2,9 +2,17 @@ from bs4 import BeautifulSoup
 import requests
 import json
 
-def main():
-    # todo: make it dynamic to support all dining halls, display date as well
-    url = "http://menus.tufts.edu/FoodPro%203.1.NET/shortmenu.aspx?sName=TUFTS+DINING&locationNum=03&locationName=Kindlevan+Caf%26eacute%3b+&naFlag=1"
+def main():  
+    # dictionary of locations mapped to their location identifiers
+    locations = {"Carmichael Dining Center" : "09", 
+                 "Dewick Dining Center" : "11",
+                 "The Commons Marketplace" : "55",
+                 "Hodgdon Food On-the-Run  " : "14",
+                 "Pax et Lox Glatt Kosher Deli" : "27",
+                 "Kindlevan Caf%26eacute%3b " : "03"}
+
+    location = 'Carmichael Dining Center'
+    url = f"http://menus.tufts.edu/FoodPro%203.1.NET/shortmenu.aspx?sName=TUFTS+DINING&locationNum={locations[location]}&locationName={location}&naFlag=1"
     website = requests.get(url)
     soup = BeautifulSoup(website.text, 'html.parser')
 
@@ -24,7 +32,7 @@ def main():
             if menu_type:
                 print(f"xxxxxxxxxxxxxxxxx{menu_type}xxxxxxxxxxxxxxxxx")
             if category:
-                print(f"--------------------{category}------------------")
+                print(f"---------{category}---------")
             if div["class"][0] == "shortmenurecipes":
                 print(div.text)
         except:
