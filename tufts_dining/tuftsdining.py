@@ -2,7 +2,7 @@ import datetime
 import requests
 from bs4 import BeautifulSoup
 
-from tufts_dining_api.locations import locations
+from tufts_dining.locations import locations
 
 class TuftsDining():
     def __init__(self, location):

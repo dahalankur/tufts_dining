@@ -1,1 +1,0 @@
-from tufts_dining_api.tuftsdining import TuftsDining
