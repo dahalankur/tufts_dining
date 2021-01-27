@@ -1,1 +1,1 @@
-from tufts_dining_api.scraper import Dining
+from tufts_dining_api.tuftsdining import TuftsDining

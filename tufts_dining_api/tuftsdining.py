@@ -4,8 +4,7 @@ from bs4 import BeautifulSoup
 
 from tufts_dining_api.locations import locations
 
-# TODO: rename this class (and this file)
-class Dining():
+class TuftsDining():
     def __init__(self, location):
         self.location = location
         if location in locations:
@@ -97,5 +96,5 @@ class Dining():
         return response
 
 
-# carm = Dining("Carmichael Dining Center")
+# carm = TuftsDining("Carmichael Dining Center")
 # print(carm.menu()
