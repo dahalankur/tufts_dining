@@ -9,7 +9,7 @@ import datetime
 import requests
 from bs4 import BeautifulSoup
 
-from tufts_dining.constants import *
+from constants import *
 
 
 class TuftsDining():
@@ -19,6 +19,7 @@ class TuftsDining():
     """
     def __init__(self, location):
         self.location = location
+        self.locations = [location for location, id in LOCATIONS.items()]
         if location in LOCATIONS:
             self._locationId = LOCATIONS[self.location]
         else:
