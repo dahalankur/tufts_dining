@@ -46,6 +46,8 @@ hodge = TuftsDining("Hodgdon Food On-the-Run")
 hodge_menu = hodge.menu("02-23-2021")
 
 ```
+### Author
+ Ankur Dahal - [@dahalankur](https://github.com/dahalankur)
 
 ### Changelog
 #### 0.1.0 - 01/29/2021
