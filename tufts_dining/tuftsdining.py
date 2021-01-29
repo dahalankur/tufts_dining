@@ -1,84 +1,148 @@
+import re
 import datetime
 import requests
 from bs4 import BeautifulSoup
 
-from tufts_dining.locations import locations
+from constants import *
+
 
 class TuftsDining():
     def __init__(self, location):
         self.location = location
-        if location in locations:
-            self._locationId = locations[self.location]
+        if location in LOCATIONS:
+            self._locationId = LOCATIONS[self.location]
         else:
             self.location = None
             self._locationId = None
 
 
-    # TODO: support querying on the basis of date provided
+
     """
-    Returns the full menu of the dining location as a dictionary
+    menu
+    does   :  returns the full menu of the dining location this method is called on
+    params :  date (optional) - the required date in "MM-DD-YYYY" format
+    returns:  the menu for the provided date as a dictionary
+    notes  :  may return a dictionary with a single key, "Error" in cases where
+              the supplied date is in the wrong format, or when the 
+              object was initialized with an incorrect location
     """
     def menu(self, date=None):
-        # check if valid location was provided in the constructor
         if self.location:
+            # set date = Today if no parameters were supplied
             if not date:
-                date = datetime.date.today()
+                date = datetime.date.today().strftime('%m-%d-%Y')
             else: 
-                pass
-                # check the supplied date for errors
-        
-            # TODO: modify url to accommodate the date parameter
-            url = f"http://menus.tufts.edu/FoodPro%203.1.NET/shortmenu.aspx?sName=TUFTS+DINING&locationNum={self._locationId}&locationName={self.location}&naFlag=1"
+                if not self._isValidDate(date):
+                    return INVALID_DATE
+            
+            # extract the day, month and year from the date
+            month, day, year = date.split("-")
+
+            # construct the url
+            url = f"http://menus.tufts.edu/FoodPro%203.1.NET/shortmenu.aspx?sName=TUFTS+DINING&"
+            url += f"locationNum={self._locationId}&locationName={self.location}&naFlag=1"
+            url += f"&WeeksMenus=This+Week%27s+Menus&myaction=read&dtdate={month}%2f{day}%2f{year}"
+            
+            # scrape the website and return the result
             soup = BeautifulSoup(requests.get(url).text, 'html.parser')
-            menu_date = None  # TODO: modify this to use the supplied date instead    
-            return self.__getResponse(soup)
+            return self._getResponse(soup)
         else:
-            return {"Error" : "Invalid location provided"}
+            return INVALID_LOCATION
            
 
+
+    """
+    breakfast
+    does   :  returns the breakfast menu of the dining location this method is called on
+    params :  date (optional) - the required date in "MM-DD-YYYY" format
+    returns:  the breakfast menu for the provided date as a dictionary
+    notes  :  may return a dictionary with a single key, "Error" in cases where
+              the supplied date is in the wrong format, when the 
+              object was initialized with an incorrect location, or if there 
+              exists no breakfast menu for the location provided
+    """
     def breakfast(self, date=None):
         if self.location:
-            menu = self.menu()
+            if not date:
+                menu = self.menu()
+            else:
+                if self._isValidDate(date):
+                    menu = self.menu(date)
+                else:
+                    return INVALID_DATE
             if "Breakfast" in menu:
                 return menu["Breakfast"]
-            return {"Error" : "Breakfast not available for the selected location"}
+            return BREAKFAST_NOT_AVAILABLE
         else:
-            return {"Error" : "Invalid location provided"}
+            return INVALID_LOCATION
     
 
+
+    """
+    dinner
+    does   :  returns the dinner menu of the dining location this method is called on
+    params :  date (optional) - the required date in "MM-DD-YYYY" format
+    returns:  the dinner menu for the provided date as a dictionary
+    notes  :  may return a dictionary with a single key, "Error" in cases where
+              the supplied date is in the wrong format, when the 
+              object was initialized with an incorrect location, or if there 
+              exists no dinner menu for the location provided
+    """
     def dinner(self, date=None):
         if self.location:
-            menu = self.menu()
+            if not date:
+                menu = self.menu()
+            else:
+                if self._isValidDate(date):
+                    menu = self.menu(date)
+                else:
+                    return INVALID_DATE
             if "Dinner" in menu:
                 return menu["Dinner"]
-            return {"Error" : "Dinner not available for the selected location"}
+            return DINNER_NOT_AVAILABLE
         else:
-            return {"Error" : "Invalid location provided"}
+            return INVALID_LOCATION
     
 
+
+    """
+    lunch
+    does   :  returns the lunch menu of the dining location this method is called on
+    params :  date (optional) - the required date in "MM-DD-YYYY" format
+    returns:  the lunch menu for the provided date as a dictionary
+    notes  :  may return a dictionary with a single key, "Error" in cases where
+              the supplied date is in the wrong format, when the 
+              object was initialized with an incorrect location, or if there 
+              exists no lunch menu for the location provided
+    """
     def lunch(self, date=None):
         if self.location:
-            menu = self.menu()
+            if not date:
+                menu = self.menu()
+            else:
+                if self._isValidDate(date):
+                    menu = self.menu(date)
+                else:
+                    return INVALID_DATE
             if "Lunch" in menu:
                 return menu["Lunch"]
-            return {"Error" : "Lunch not available for the selected location"}
+            return LUNCH_NOT_AVAILABLE
         else:
-            return {"Error" : "Invalid location provided"}
+            return INVALID_LOCATION
 
     
+
     """
-    Private helper method for constructing the response dict
+    _getResponse
+    Helper method for constructing the response dict
     """
-    def __getResponse(self, soup):
+    def _getResponse(self, soup):
         response = dict()
-        # menu_date = None
+
         for div in soup.findAll("div"):
             try:
                 curr_div_class = div["class"][0]
-                # if not menu_date:
-                #     if curr_div_class == "shortmenutitle":
-                #         menu_date = "".join(div.text.split(",")[-2:]).strip()
-                #         response["date"] = menu_date
+
                 if curr_div_class == "shortmenumeals":
                     menu_type = div.text.strip()
                     if menu_type not in response:
@@ -90,11 +154,20 @@ class TuftsDining():
                 elif curr_div_class == "shortmenurecipes":
                     food_item = div.text.strip()
                     category_dict[category].append(food_item)
-                # TODO: account for duplicate categories and food_items
             except:
                 continue
         return response
 
 
+    """
+    _isValidDate
+    Checks if the supplied date is in mm-dd-yyyy format
+    """
+    def _isValidDate(self, date):
+        rexp = "^((0[1-9])|(1[0-2]))-(0[1-9]|[1-2][0-9]|3[0-1])-20[0-2][0-9]$"
+        return True if re.search(rexp, date) else False
+
+
+
 # carm = TuftsDining("Carmichael Dining Center")
-# print(carm.menu()
+# print(carm.dinner("02-01-2021"))
