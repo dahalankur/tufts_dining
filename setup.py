@@ -24,5 +24,5 @@ setup(
         "requests==2.25.1",
         "soupsieve==2.1",
         "urllib3==1.26.2"],
-    python_requires=">=3.9"
+    python_requires=">=3.6"
 )
