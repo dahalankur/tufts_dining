@@ -9,7 +9,7 @@ import datetime
 import requests
 from bs4 import BeautifulSoup
 
-from constants import *
+from tufts_dining.constants import *
 
 
 class TuftsDining():
