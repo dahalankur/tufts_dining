@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="tufts_dining_api",
+    name="tufts_dining",
     version="1.0",
     packages=find_packages(),
-    description="A Python API for retrieving Tufts Dining menus",
-    url="https://github.com/dahalankur/tufts-dining-api",
+    description="A Python package for retrieving Tufts Dining menus",
+    url="https://github.com/dahalankur/tufts_dining",
     author="Ankur Dahal",
     author_email="dahalankur123@gmail.com",
     license="MIT",
@@ -15,7 +15,7 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python"
     ],
-    keywords="tufts-dining-api tufts-university dining-api",
+    keywords="tufts-dining-package tufts-university dining-package",
     install_requires=[
         "beautifulsoup4==4.9.3",
         "certifi==2020.12.5",
