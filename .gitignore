@@ -3,3 +3,6 @@ venv/
 __pycache__/
 .DS_Store
 src/.vscode/
+build/
+dist/
+tufts_dining.egg-info/
