@@ -3,10 +3,14 @@ import datetime
 import requests
 from bs4 import BeautifulSoup
 
-from constants import *
+from tufts_dining.constants import *
 
 
 class TuftsDining():
+    """
+    __init__
+    initialize the instance, set location id if valid location is provided
+    """
     def __init__(self, location):
         self.location = location
         if location in LOCATIONS:
@@ -130,6 +134,32 @@ class TuftsDining():
         else:
             return INVALID_LOCATION
 
+
+
+    """
+    brunch
+    does   :  returns the brunch menu of the dining location this method is called on
+    params :  date (optional) - the required date in "MM-DD-YYYY" format
+    returns:  the brunch menu for the provided date as a dictionary
+    notes  :  may return a dictionary with a single key, "Error" in cases where
+              the supplied date is in the wrong format, when the 
+              object was initialized with an incorrect location, or if there 
+              exists no brunch menu for the location provided
+    """
+    def brunch(self, date=None):
+        if self.location:
+            if not date:
+                menu = self.menu()
+            else:
+                if self._isValidDate(date):
+                    menu = self.menu(date)
+                else:
+                    return INVALID_DATE
+            if "Brunch" in menu:
+                return menu["Brunch"]
+            return BRUNCH_NOT_AVAILABLE
+        else:
+            return INVALID_LOCATION
     
 
     """
@@ -166,8 +196,3 @@ class TuftsDining():
     def _isValidDate(self, date):
         rexp = "^((0[1-9])|(1[0-2]))-(0[1-9]|[1-2][0-9]|3[0-1])-20[0-2][0-9]$"
         return True if re.search(rexp, date) else False
-
-
-
-# carm = TuftsDining("Carmichael Dining Center")
-# print(carm.dinner("02-01-2021"))

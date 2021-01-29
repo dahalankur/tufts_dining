@@ -14,4 +14,5 @@ INVALID_DATE     = {"Error" : "Invalid date supplied. Please check the date form
 
 BREAKFAST_NOT_AVAILABLE = {"Error" : "Breakfast not available for the selected location"}
 LUNCH_NOT_AVAILABLE     = {"Error" : "Lunch not available for the selected location"}
+BRUNCH_NOT_AVAILABLE    = {"Error" : "Brunch not available for the selected location"}
 DINNER_NOT_AVAILABLE    = {"Error" : "Dinner not available for the selected location"}
