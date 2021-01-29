@@ -8,7 +8,7 @@ LOCATIONS =    {"Carmichael Dining Center" : "09",
 
 
 
-# --------- Dictionaries with a single key, "Error" -----------
+# ---------- Dictionaries with a single key, "Error" -----------
 INVALID_LOCATION = {"Error" : "Invalid location provided"}
 INVALID_DATE     = {"Error" : "Invalid date supplied. Please check the date format"}
 
@@ -16,3 +16,4 @@ BREAKFAST_NOT_AVAILABLE = {"Error" : "Breakfast not available for the selected l
 LUNCH_NOT_AVAILABLE     = {"Error" : "Lunch not available for the selected location"}
 BRUNCH_NOT_AVAILABLE    = {"Error" : "Brunch not available for the selected location"}
 DINNER_NOT_AVAILABLE    = {"Error" : "Dinner not available for the selected location"}
+# ----------                                         -----------

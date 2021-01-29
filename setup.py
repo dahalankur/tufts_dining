@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 
 setup(
     name="tufts_dining",
-    version="1.0",
+    version="0.1.0",
     packages=find_packages(),
-    description="A Python package for retrieving Tufts Dining menus",
+    description="A Python package for retrieving menus from Tufts Dining",
     url="https://github.com/dahalankur/tufts_dining",
     author="Ankur Dahal",
     author_email="dahalankur123@gmail.com",

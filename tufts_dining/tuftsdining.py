@@ -1,3 +1,9 @@
+"""
+tuftsdining.py
+Author: Ankur Dahal
+Date:   01-29-2021
+A python package that exports the TuftsDining class, used to retrieve Tufts Dining menus.
+"""
 import re
 import datetime
 import requests
